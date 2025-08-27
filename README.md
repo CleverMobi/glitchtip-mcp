@@ -42,8 +42,8 @@ Add to your Claude Desktop configuration (`claude_desktop_config.json`):
 {
   "mcpServers": {
     "glitchtip": {
-      "command": "node",
-      "args": ["/path/to/glitchtip-mcp/src/index.js"],
+      "command": "npx",
+      "args": ["-y", "github:CleverMobi/glitchtip-mcp"],
       "env": {
         "GLITCHTIP_API_TOKEN": "your-api-token",
         "GLITCHTIP_ORGANIZATION_SLUG": "your-org-slug",

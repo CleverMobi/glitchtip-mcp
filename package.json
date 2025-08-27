@@ -1,15 +1,40 @@
 {
-  "name": "@glitchtip/mcp-server",
+  "name": "@karsten684/glitchtip-mcp-server",
   "version": "0.1.0",
   "description": "MCP server for Glitchtip API integration",
   "main": "src/index.js",
   "type": "module",
-  "scripts": {
-    "start": "node src/index.js"
+  "bin": {
+    "glitchtip-mcp": "./src/index.js"
   },
-  "keywords": ["mcp", "glitchtip", "api"],
+  "scripts": {
+    "start": "node src/index.js",
+    "prepublishOnly": "npm test --if-present",
+    "version": "npm run format --if-present && git add -A src",
+    "postversion": "git push && git push --tags"
+  },
+  "keywords": ["mcp", "glitchtip", "api", "model-context-protocol", "error-tracking"],
   "author": "",
-  "license": "MIT",
+  "license": "AGPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CleverMobi/glitchtip-mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/CleverMobi/glitchtip-mcp/issues"
+  },
+  "homepage": "https://github.com/CleverMobi/glitchtip-mcp#readme",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "files": [
+    "src/",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.4",
     "node-fetch": "^3.3.2"
