@@ -4,7 +4,9 @@
   "description": "MCP server for Glitchtip API integration",
   "main": "src/index.js",
   "type": "module",
-  "bin": "./src/index.js",
+  "bin": {
+    "glitchtip-mcp-server": "./src/index.js"
+  },
   "scripts": {
     "start": "node src/index.js",
     "prepublishOnly": "npm test --if-present",
