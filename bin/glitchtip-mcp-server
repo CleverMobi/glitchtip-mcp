@@ -1,0 +1,22 @@
+#!/usr/bin/env node
+
+// This is a wrapper script to ensure proper execution with npx
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+import { spawn } from 'child_process';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// Path to the actual implementation
+const indexPath = join(__dirname, '..', 'src', 'index.js');
+
+// Spawn node with the index.js file
+const child = spawn(process.execPath, [indexPath, ...process.argv.slice(2)], {
+  stdio: 'inherit',
+  env: process.env
+});
+
+child.on('exit', (code) => {
+  process.exit(code);
+});
