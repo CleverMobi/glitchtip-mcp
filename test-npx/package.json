@@ -1,0 +1,16 @@
+{
+  "name": "test-npx",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@karsten684/glitchtip-mcp-server": "^0.1.4"
+  }
+}

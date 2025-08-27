@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "type": "module",
   "bin": {
-    "glitchtip-mcp-server": "./bin/glitchtip-mcp-server"
+    "glitchtip-mcp-server": "./bin/glitchtip-mcp-server.cjs"
   },
   "scripts": {
     "start": "node src/index.js",
@@ -43,6 +43,7 @@
     "access": "public"
   },
   "dependencies": {
+    "@karsten684/glitchtip-mcp-server": "^0.1.4",
     "@modelcontextprotocol/sdk": "^1.0.4",
     "node-fetch": "^3.3.2"
   }
