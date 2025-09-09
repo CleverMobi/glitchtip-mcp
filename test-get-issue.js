@@ -61,6 +61,9 @@ async function getIssue(args) {
     }
 
     result.issue = await issueResponse.json();
+    
+    // Remove project field to reduce size
+    delete result.issue.project;
 
     // 2. Get latest event details
     try {
@@ -75,6 +78,50 @@ async function getIssue(args) {
 
       if (eventResponse.ok) {
         result.latestEvent = await eventResponse.json();
+        
+        // Remove packages and sdk fields to reduce size
+        delete result.latestEvent.packages;
+        delete result.latestEvent.sdk;
+        
+        // Process entries to reduce size
+        if (result.latestEvent.entries) {
+          result.latestEvent.entries.forEach(entry => {
+            // Limit breadcrumbs to last 10 if there are more than 10
+            if (entry.type === 'breadcrumbs' && entry.data && entry.data.values && 
+                Array.isArray(entry.data.values) && entry.data.values.length > 10) {
+              // Keep only the last 10 breadcrumbs
+              const totalBreadcrumbs = entry.data.values.length;
+              entry.data.values = entry.data.values.slice(-10);
+              // Add a note about how many were removed
+              entry.data.values.unshift({
+                timestamp: entry.data.values[0]?.timestamp || null,
+                type: 'info',
+                category: 'truncation',
+                level: 'info',
+                message: `[${totalBreadcrumbs - 10} earlier breadcrumbs removed]`
+              });
+            }
+            
+            // Check in breadcrumb data values for messenger.messages
+            if (entry.data && entry.data.values) {
+              entry.data.values.forEach(value => {
+                // Check if value has data.messenger.messages
+                if (value.data && value.data.messenger && value.data.messenger.messages) {
+                  value.data.messenger.messages.forEach(message => {
+                    if (message.fields) {
+                      // Check if the entire fields object when JSON encoded is > 200 chars
+                      const fieldsJson = JSON.stringify(message.fields);
+                      if (fieldsJson.length > 200) {
+                        // Replace the entire fields with a truncated JSON string
+                        message.fields = fieldsJson.substring(0, 200) + '... [truncated]';
+                      }
+                    }
+                  });
+                }
+              });
+            }
+          });
+        }
       }
     } catch (error) {
       // Silently ignore if latest event cannot be fetched
@@ -145,7 +192,9 @@ console.log(`  Level: ${data.issue.level}`);
 console.log(`  Count: ${data.issue.count} occurrences`);
 console.log(`  First Seen: ${data.issue.firstSeen}`);
 console.log(`  Last Seen: ${data.issue.lastSeen}`);
-console.log(`  Project: ${data.issue.project.name} (${data.issue.project.platform})`);
+if (data.issue.project) {
+  console.log(`  Project: ${data.issue.project.name} (${data.issue.project.platform})`);
+}
 
 console.log('\n2️⃣ LATEST EVENT:');
 if (data.latestEvent) {
